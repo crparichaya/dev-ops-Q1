@@ -1,6 +1,13 @@
 version: '3'
 services:
-
+  advertise:
+    build: ./advertise
+    ports:
+      - "3006:3006"
+    environment:
+      - PORT=3006
+    networks:
+      - app-network
   db:
     image: mongo:7.0.0
     container_name: db
@@ -185,3 +192,7 @@ services:
       - db
       - rabbit
     restart: "no"
+
+networks:
+  app-network:
+    driver: bridge

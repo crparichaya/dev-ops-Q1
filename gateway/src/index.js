@@ -14,10 +14,27 @@ const PORT = process.env.PORT;
 async function main() {
     const app = express();
 
-    app.set("views", path.join(__dirname, "views")); // Set directory that contains templates for views.
-    app.set("view engine", "hbs"); // Use hbs as the view engine for Express.
-    
-    app.use(express.static("public"));
+    app.set("views", path.join(__dirname, "views")); // Set directory for templates.
+    app.set("view engine", "hbs"); // Use Handlebars as the view engine.
+
+    app.use(express.static("public")); // Serve static files from 'public' directory.
+
+    //
+    // Advertisement page that displays e-commerce ads.
+    //
+    app.get("/advertise", async (req, res) => {
+        try {
+            // Retrieve advertisement data from the advertise microservice.
+            const adsResponse = await axios.get("http://advertise/ads");
+
+            // Render the advertisement page with the received ad data.
+            res.render("advertise", { ads: adsResponse.data.ads });
+
+        } catch (error) {
+            console.error("Failed to fetch advertisement data:", error);
+            res.status(500).send("Error fetching advertisement data.");
+        }
+    });
 
     //
     // Main web page that lists videos.
@@ -73,11 +90,10 @@ async function main() {
     // HTTP GET route that streams video to the user's browser.
     //
     app.get("/api/video", async (req, res) => {
-
-        const response = await axios({ // Forwards the request to the video-streaming microservice.
+        const response = await axios({
             method: "GET",
-            url: `http://video-streaming/video?id=${req.query.id}`, 
-            data: req, 
+            url: `http://video-streaming/video?id=${req.query.id}`,
+            data: req,
             responseType: "stream",
         });
         response.data.pipe(res);
@@ -87,11 +103,10 @@ async function main() {
     // HTTP POST route to upload video from the user's browser.
     //
     app.post("/api/upload", async (req, res) => {
-
-        const response = await axios({ // Forwards the request to the video-upload microservice.
+        const response = await axios({
             method: "POST",
-            url: "http://video-upload/upload", 
-            data: req, 
+            url: "http://video-upload/upload",
+            data: req,
             responseType: "stream",
             headers: {
                 "content-type": req.headers["content-type"],
@@ -102,7 +117,7 @@ async function main() {
     });
 
     app.listen(PORT, () => {
-        console.log("Microservice online.");
+        console.log(`Microservice online on port ${PORT}`);
     });
 }
 

@@ -1,0 +1,13 @@
+{
+    "name": "advertise",
+    "version": "1.0.0",
+    "description": "Advertise microservice",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    }
+  }
+  

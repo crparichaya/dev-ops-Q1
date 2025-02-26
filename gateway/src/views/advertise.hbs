@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertisements</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .ad-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .ad-container a { text-decoration: none; }
+        .ad-container img { width: 200px; height: auto; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Featured Advertisements</h1>
+    <div class="ad-container">
+        {{#each ads}}
+            <a href="{{this.url}}" target="_blank">
+                <img src="{{this.image}}" alt="Ad">
+            </a>
+        {{/each}}
+    </div>
+</body>
+</html>
